@@ -1,7 +1,11 @@
-import Image from "next/image";
+"use client";
 
+import Image from "next/image";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 export default function VigyaanLandingPage() {
   const navItems = ["Home", "Services", "Contact"];
+  const [open, setOpen] = useState(false);
 
   const features = [
     "Periodic mini-tests to evaluate student performance",
@@ -46,39 +50,82 @@ export default function VigyaanLandingPage() {
 
   return (
     <div className="min-h-screen bg-[#f5efe7] text-[#1e1e1e] overflow-x-hidden">
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-[#f5efe7]/90 border-b border-[#d5b07a]">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo.jpeg"
-              alt="logo"
-              className="h-[50px] w-[70px] object-contain"
-              height={100}
-              width={100}
-            />
+      <>
+        <nav className="sticky top-0 z-50 backdrop-blur-lg bg-[#f5efe7]/90 border-b border-[#d5b07a]">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo.jpeg"
+                alt="logo"
+                className="h-[50px] w-[70px] object-contain"
+                height={100}
+                width={100}
+              />
 
-            <div>
-              <h1 className="text-2xl md:text-3xl font-black tracking-[0.3em] text-[#b57a2c]">
-                ViGYAAN
-              </h1>
-
-              <p className="text-xs tracking-[0.5em] text-[#222]">ACADEMY</p>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black tracking-[0.3em] text-[#b57a2c]">
+                  ViGYAAN
+                </h1>
+                <p className="text-xs tracking-[0.5em] text-[#222]">ACADEMY</p>
+              </div>
             </div>
+
+            {/* Desktop nav */}
+            <div className="hidden md:flex items-center gap-8 text-base font-semibold">
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="hover:text-[#c17d2f] transition-colors"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+
+            {/* Mobile button */}
+            <button className="md:hidden" onClick={() => setOpen(true)}>
+              <Menu size={28} />
+            </button>
+          </div>
+        </nav>
+
+        {/* Overlay */}
+        {open && (
+          <div
+            className="fixed inset-0 bg-black/40 z-40"
+            onClick={() => setOpen(false)}
+          />
+        )}
+
+        {/* Drawer */}
+        <div
+          className={` bg-[#f5efe7] fixed top-0 right-0 h-full w-72 z-50 shadow-lg transform transition-transform duration-300 ${
+            open ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex justify-between items-center p-5 border-b">
+            <h2 className="font-bold text-lg text-[#c08137]">Menu</h2>
+            <button onClick={() => setOpen(false)}>
+              <X size={24} />
+            </button>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-8 text-sm md:text-base font-semibold">
+          <div className="flex flex-col p-5 gap-5 text-base font-semibold">
             {navItems.map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="hover:text-[#c17d2f] transition-colors"
+                onClick={() => setOpen(false)}
+                className="text-[#c08137] hover:text-[#c17d2f]"
               >
                 {item}
               </a>
             ))}
           </div>
         </div>
-      </nav>
+      </>
 
       <section
         id="home"
@@ -149,13 +196,12 @@ export default function VigyaanLandingPage() {
               syllabus. It is a challenge for any student to prepare this vast
               syllabus and get their name on the final list of selected
               candidates of examination in a limited span of time.
-            
             </p>
-              <p className="mt-8 text-lg text-gray-300 leading-relaxed my-2">
-                VIGYAAN has developed a comprehensive academic program that
-                addresses the issues that CSE and other competitive exams
-                aspirants confront, distinguishing us from other institutes.
-              </p>
+            <p className="mt-8 text-lg text-gray-300 leading-relaxed my-2">
+              VIGYAAN has developed a comprehensive academic program that
+              addresses the issues that CSE and other competitive exams
+              aspirants confront, distinguishing us from other institutes.
+            </p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-5">
@@ -263,12 +309,16 @@ export default function VigyaanLandingPage() {
               ViGYAAN Academy transforms scattered ambition into disciplined
               preparation.
             </p>
-            <h5 className="text-xl md:text-2xl font-black leading-tight my-4">Our Address</h5>
+            <h5 className="text-xl md:text-2xl font-black leading-tight my-4">
+              Our Address
+            </h5>
             <p className="mt-8 text-lg text-gray-300 leading-relaxed max-w-xl">
-              Cyber Residency, Plot No.647, Ground Floor, Sri
-              Ramnagar Colony, Block - C, Serilingampally, Rangareddy, Telangana.
+              Cyber Residency, Plot No.647, Ground Floor, Sri Ramnagar Colony,
+              Block - C, Serilingampally, Rangareddy, Telangana.
             </p>
-            <h5 className="text-xl md:text-2xl font-black leading-tight my-4">Call US</h5>
+            <h5 className="text-xl md:text-2xl font-black leading-tight my-4">
+              Call US
+            </h5>
             <p>9490172438, 7799077701</p>
           </div>
 

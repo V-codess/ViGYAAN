@@ -32,19 +32,16 @@ export default function VigyaanLandingPage() {
       name: "Prasad Goud V",
       occupation: "Director",
       Location: "ViGYAAN Academy",
-      image: "/f1.png",
     },
     {
       name: "Manoj Reddy M",
       occupation: "Director",
       Location: "ViGYAAN Academy",
-      image: "/f2.png",
     },
     {
       name: "K R Krishna",
       occupation: "Course Adviser",
       Location: "ViGYAAN Academy",
-      image: "/f3.png",
     },
   ];
 
@@ -94,7 +91,7 @@ export default function VigyaanLandingPage() {
         {/* Overlay */}
         {open && (
           <div
-            className="fixed inset-0 bg-black/40 z-40"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
             onClick={() => setOpen(false)}
           />
         )}
@@ -108,7 +105,7 @@ export default function VigyaanLandingPage() {
           <div className="flex justify-between items-center p-5 border-b">
             <h2 className="font-bold text-lg text-[#c08137]">Menu</h2>
             <button onClick={() => setOpen(false)}>
-              <X size={24} />
+              <X color="#c08137" size={24} />
             </button>
           </div>
 
@@ -168,7 +165,7 @@ export default function VigyaanLandingPage() {
 
             <div className="relative bg-white/80 backdrop-blur-xl p-4 rounded-[2rem] shadow-[0_20px_80px_rgba(0,0,0,0.18)] border border-[#e7c59c]">
               <Image
-                src="/student.png"
+                src="/student.jpg"
                 alt="Students"
                 className="w-full max-w-xl h-[500px] object-cover rounded-[1.5rem]"
                 height={100}
@@ -271,13 +268,6 @@ export default function VigyaanLandingPage() {
                 className="bg-white/80 backdrop-blur-md rounded-[2rem] overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.12)] border border-white/60"
               >
                 <div className="p-6">
-                  <Image
-                    src={photo.image}
-                    alt={`Founder ${index + 1}`}
-                    className="h-[420px] w-full object-cover "
-                    width={1200}
-                    height={800}
-                  />
                   <h4 className="text-2xl font-black my-2">{photo.name}</h4>
                   <h6 className="text-xl font-black text-[#c08137]">
                     {photo.occupation}
@@ -317,9 +307,21 @@ export default function VigyaanLandingPage() {
               Block - C, Serilingampally, Rangareddy, Telangana.
             </p>
             <h5 className="text-xl md:text-2xl font-black leading-tight my-4">
-              Call US
+              Call Us
             </h5>
-            <p>9490172438, 7799077701</p>
+            <a href="tel:+917799077701" className="text-gray-300">
+              <p>
+                Primary Number:{" "}
+                <span className="hover:underline">+91-7799077701</span>
+              </p>
+            </a>
+            <div></div>
+            <a href="tel:+917799077701" className="text-gray-300">
+              <p>
+                Alternative Number:{" "}
+                <span className="hover:underline">+91-7396747359</span>
+              </p>
+            </a>
           </div>
 
           <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-lg">

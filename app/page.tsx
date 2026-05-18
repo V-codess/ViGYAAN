@@ -7,12 +7,16 @@ export default function VigyaanLandingPage() {
   const navItems = ["Home", "Services", "Contact"];
   const [open, setOpen] = useState(false);
 
+   const handleSubmit = () => {
+    alert("Message sent to ViGYAAN Academy! They will get back to you shortly. Meanwhile explore our courses.");
+  };
+
   const features = [
-    "Periodic mini-tests to evaluate student performance",
-    "Individualized attention for every pupil",
-    "Motivational speeches by current and past government employees",
+    "Periodic mini-tests to evaluate student performance.",
+    "Individualized attention for every pupil.",
+    "Motivational speeches by current and past government employees.",
     "Educating young students o n the basics of civil service examinations.",
-    "ncreasing understanding of basic vocabulary and concepts across all subjects.",
+    "Increasing understanding of basic vocabulary and concepts across all subjects.",
     "Regular essay writing, quizzes, and public elocution competitions to raise general awareness.",
   ];
 
@@ -32,16 +36,19 @@ export default function VigyaanLandingPage() {
       name: "Prasad Goud V",
       occupation: "Director",
       Location: "ViGYAAN Academy",
+      description:"B.tech in ECE, M.A.in sociology, M.A.in Journalism and Mass communication, 10 plus years of experience teaching and counselling, TSAT (Government channel) current affairs faculty."
     },
     {
       name: "Manoj Reddy M",
       occupation: "Director",
       Location: "ViGYAAN Academy",
+      description:"B.tech in Biotechnology, M.A. in History, UGC NET qualified, 10 plus years of experience in Teaching and content writing, Former Asst. professor in Yogi Vemana University and Sakshi columnist."
     },
     {
       name: "K R Krishna",
       occupation: "Course Adviser",
       Location: "ViGYAAN Academy",
+      description:"M.Sc in Physics, M.Sc in Mathematics, M.Ed. UGC NET qualified, M.A in Public Administration Set qualified, 15 plus years of experience in Teaching and Mentoring."
     },
   ];
 
@@ -61,10 +68,12 @@ export default function VigyaanLandingPage() {
               />
 
               <div>
-                <h1 className="text-2xl md:text-3xl font-black tracking-[0.3em] text-[#b57a2c]">
-                  ViGYAAN
+                <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-[0.2em] sm:tracking-[0.3em] text-[#b57a2c]">
+                  ViGYAAN ACADEMY
                 </h1>
-                <p className="text-xs tracking-[0.5em] text-[#222]">ACADEMY</p>
+                <p className="sm:text-xl sm:tracking-[0em] text-xs sm:text-xs md:text-xs tracking-[0.2em] text-[#222]">
+                  A compass to success in this competitive world
+                </p>
               </div>
             </div>
 
@@ -149,13 +158,18 @@ export default function VigyaanLandingPage() {
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
-              <button className="bg-[#1c1c1c] hover:bg-[#2a2a2a] text-white px-8 py-4 rounded-2xl font-bold shadow-2xl transition-transform hover:scale-105">
+              <a
+                href="#services"
+                className="bg-[#1c1c1c] text-white text-center inline-block text-[#1c1c1c] hover:bg-[#c08137] hover:text-white px-8 py-4 rounded-2xl font-bold transition-all scroll-smooth"
+              >
                 Explore Programme
-              </button>
-
-              <button className="border-2 border-[#c08137] text-[#1c1c1c] hover:bg-[#c08137] hover:text-white px-8 py-4 rounded-2xl font-bold transition-all">
+              </a>
+              <a
+                href="#contact"
+                className="text-center inline-block border-2 border-[#c08137] text-[#1c1c1c] hover:bg-[#c08137] hover:text-white px-8 py-4 rounded-2xl font-bold transition-all scroll-smooth"
+              >
                 Contact Us
-              </button>
+              </a>
             </div>
           </div>
 
@@ -180,7 +194,7 @@ export default function VigyaanLandingPage() {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <div className="inline-block bg-[#c08137] text-black px-5 py-2 rounded-full font-bold mb-6">
-              Why Vigyaan?
+              Why ViGYAAN?
             </div>
 
             <h3 className="text-4xl md:text-5xl font-black leading-tight">
@@ -255,12 +269,10 @@ export default function VigyaanLandingPage() {
               </h3>
             </div>
           </div>
-          <div className="my-8">
-            <p className="max-w-xl text-lg text-[#444] leading-relaxed">
-              Educators, strategists, and mentors shaping students into
-              government service aspirants with discipline and direction.
-            </p>
-          </div>
+          <p className="max-w-xl text-lg text-[#444] leading-relaxed mx-2 my-8 sm:mx-0 sm:my-1">
+            Educators, strategists, and mentors shaping students into government
+            service aspirants with discipline and direction.
+          </p>
           <div className="grid md:grid-cols-3 gap-8">
             {founderPhotos.map((photo, index) => (
               <div
@@ -273,8 +285,7 @@ export default function VigyaanLandingPage() {
                     {photo.occupation}
                   </h6>
                   <p className="mt-3 text-[#555] leading-relaxed">
-                    Dedicated to building a competitive learning ecosystem with
-                    academic rigor and real-world mentorship.
+                    {photo.description}
                   </p>
                 </div>
               </div>
@@ -344,7 +355,10 @@ export default function VigyaanLandingPage() {
                 className="bg-black/30 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-[#c08137]"
               />
 
-              <button className="bg-[#c08137] hover:scale-[1.02] transition-transform text-black font-black py-4 rounded-2xl shadow-xl">
+              <button
+                onClick={handleSubmit}
+                className="bg-[#c08137] hover:scale-[1.02] transition-transform text-black font-black py-4 px-6 rounded-2xl shadow-xl"
+              >
                 Send Message
               </button>
             </div>
@@ -358,6 +372,10 @@ export default function VigyaanLandingPage() {
             <h4 className="text-2xl font-black tracking-[0.3em] text-[#d39b53]">
               ViGYAAN
             </h4>
+            <p className="text-xl font-black text-[#d39b53]">Academy</p>
+            <p className="text-sm mt-2 text-[#d39b53]">
+              A compass to success in this competitive world
+            </p>
             <p className="text-sm text-gray-400 mt-2">
               Graduate Plus Civil Services Programme
             </p>

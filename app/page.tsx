@@ -1,57 +1,155 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import VigyaanChatWidget from "../components/VigyaanChatWidget";
+
+interface ProgramItem {
+  _id?: string;
+  title: string;
+  program?: string;
+  category?: string;
+  duration?: string;
+}
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_GATEWAY_URL || "http://localhost:8080";
+
+const DEFAULT_TOPICS = [
+  "Indian History",
+  "Indian Economy",
+  "Current Affairs",
+  "Science & Technology",
+  "General Mental Ability",
+  "Indian Constitution",
+  "Environment & Ecology",
+  "Basic Computer Knowledge",
+];
+
+const FEATURES = [
+  "Periodic mini-tests to evaluate student performance.",
+  "Individualized attention for every pupil.",
+  "Motivational speeches by current and past government employees.",
+  "Educating young students on the basics of civil service examinations.",
+  "Increasing understanding of basic vocabulary and concepts across all subjects.",
+  "Regular essay writing, quizzes, and public elocution competitions to raise general awareness.",
+];
+
+const FOUNDER_PHOTOS = [
+  {
+    name: "Prasad Goud V",
+    occupation: "Director",
+    Location: "ViGYAAN Academy",
+    description:
+      "B.tech in ECE, M.A.in sociology, M.A.in Journalism and Mass communication, 10 plus years of experience teaching and counselling, TSAT (Government channel) current affairs faculty.",
+  },
+  {
+    name: "Manoj Reddy M",
+    occupation: "Director",
+    Location: "ViGYAAN Academy",
+    description:
+      "B.tech in Biotechnology, M.A. in History, UGC NET qualified, 10 plus years of experience in Teaching and content writing, Former Asst. professor in Yogi Vemana University and Sakshi columnist.",
+  },
+  {
+    name: "K R Krishna",
+    occupation: "Course Adviser",
+    Location: "ViGYAAN Academy",
+    description:
+      "M.Sc in Physics, M.Sc in Mathematics, M.Ed. UGC NET qualified, M.A in Public Administration Set qualified, 15 plus years of experience in Teaching and Mentoring.",
+  },
+];
+
 export default function VigyaanLandingPage() {
   const navItems = ["Home", "Services", "Contact"];
   const [open, setOpen] = useState(false);
 
-   const handleSubmit = () => {
-    alert("Message sent to ViGYAAN Academy! They will get back to you shortly. Meanwhile explore our courses.");
-  };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const features = [
-    "Periodic mini-tests to evaluate student performance.",
-    "Individualized attention for every pupil.",
-    "Motivational speeches by current and past government employees.",
-    "Educating young students o n the basics of civil service examinations.",
-    "Increasing understanding of basic vocabulary and concepts across all subjects.",
-    "Regular essay writing, quizzes, and public elocution competitions to raise general awareness.",
-  ];
+  const [programsSource, setProgramsSource] = useState<"fallback" | "api">(
+    "fallback",
+  );
+  const [programs, setPrograms] = useState<ProgramItem[]>(() =>
+    DEFAULT_TOPICS.map((title) => ({ title })),
+  );
 
-  const topics = [
-    "Indian History",
-    "Indian Economy",
-    "Current Affairs",
-    "Science & Technology",
-    "General Mental Ability",
-    "Indian Constitution",
-    "Environment & Ecology",
-    "Basic Computer Knowledge",
-  ];
+  async function handleInquirySubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatusMessage(null);
 
-  const founderPhotos = [
-    {
-      name: "Prasad Goud V",
-      occupation: "Director",
-      Location: "ViGYAAN Academy",
-      description:"B.tech in ECE, M.A.in sociology, M.A.in Journalism and Mass communication, 10 plus years of experience teaching and counselling, TSAT (Government channel) current affairs faculty."
-    },
-    {
-      name: "Manoj Reddy M",
-      occupation: "Director",
-      Location: "ViGYAAN Academy",
-      description:"B.tech in Biotechnology, M.A. in History, UGC NET qualified, 10 plus years of experience in Teaching and content writing, Former Asst. professor in Yogi Vemana University and Sakshi columnist."
-    },
-    {
-      name: "K R Krishna",
-      occupation: "Course Adviser",
-      Location: "ViGYAAN Academy",
-      description:"M.Sc in Physics, M.Sc in Mathematics, M.Ed. UGC NET qualified, M.A in Public Administration Set qualified, 15 plus years of experience in Teaching and Mentoring."
-    },
-  ];
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.message.trim()
+    ) {
+      setStatusMessage("Please fill out your name, email, and message.");
+      return;
+    }
 
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/inquiries`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          programInterest: "Graduate Plus Civil Services Programme",
+          message: formData.message.trim(),
+        }),
+      });
+      console.log("Inquiry submission response:", res);
+      if (!res.ok) {
+        throw new Error(`Request failed with status ${res.status}`);
+      }
+
+      setStatusMessage(
+        "Inquiry submitted! Explore our program and expect a response within 24 hours.",
+      );
+      setFormData({ name: "", email: "", message: "" });
+    } catch {
+      setStatusMessage(
+        "Could not reach the backend gateway. Check that Docker Compose and Nginx are running on port 8080.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadPrograms() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/programs`);
+        if (!res.ok) return;
+
+        const payload = await res.json();
+        const items: ProgramItem[] = Array.isArray(payload)
+          ? payload
+          : payload.data || payload.programs || [];
+
+        if (active && items.length > 0) {
+          setPrograms(items);
+          setProgramsSource("api");
+        }
+      } catch {
+        // Backend offline: keep local `DEFAULT_TOPICS` fallback seamlessly
+      }
+    }
+
+    loadPrograms();
+    return () => {
+      active = false;
+    };
+  }, []);
+ 
   return (
     <div className="min-h-screen bg-[#f5efe7] text-[#1e1e1e] overflow-x-hidden">
       <>
@@ -107,7 +205,7 @@ export default function VigyaanLandingPage() {
 
         {/* Drawer */}
         <div
-          className={` bg-[#f5efe7] fixed top-0 right-0 h-full w-72 z-50 shadow-lg transform transition-transform duration-300 ${
+          className={`bg-[#f5efe7] fixed top-0 right-0 h-full w-72 z-50 shadow-lg transform transition-transform duration-300 ${
             open ? "translate-x-0" : "translate-x-full"
           }`}
         >
@@ -160,7 +258,7 @@ export default function VigyaanLandingPage() {
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <a
                 href="#services"
-                className="bg-[#1c1c1c] text-white text-center inline-block text-[#1c1c1c] hover:bg-[#c08137] hover:text-white px-8 py-4 rounded-2xl font-bold transition-all scroll-smooth"
+                className="bg-[#1c1c1c] text-white text-center inline-block hover:bg-[#c08137] hover:text-white px-8 py-4 rounded-2xl font-bold transition-all scroll-smooth"
               >
                 Explore Programme
               </a>
@@ -216,7 +314,7 @@ export default function VigyaanLandingPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-5">
-            {features.map((feature, index) => (
+            {FEATURES.map((feature, index) => (
               <div
                 key={index}
                 className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-md hover:-translate-y-2 transition-transform"
@@ -239,18 +337,30 @@ export default function VigyaanLandingPage() {
             <h3 className="text-4xl md:text-6xl font-black text-[#1d1d1d] leading-tight">
               Topics covered in the Graduate Plus curriculum.
             </h3>
+            {programsSource === "api" && (
+              <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-[#8c581c]">
+                Synced with MongoDB &amp; Redis Catalog
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-16">
-            {topics.map((topic, index) => (
+            {programs.map((program, index) => (
               <div
-                key={index}
+                key={program._id || program.title || index}
                 className="group bg-white rounded-3xl p-6 border border-[#e3c39d] shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2"
               >
                 <div className="w-14 h-14 rounded-2xl bg-[#c08137] text-white flex items-center justify-center text-2xl mb-5 group-hover:rotate-6 transition-transform">
                   📘
                 </div>
-                <h4 className="font-bold text-lg leading-snug">{topic}</h4>
+                <h4 className="font-bold text-lg leading-snug">
+                  {program.title}
+                </h4>
+                {program.duration && (
+                  <p className="mt-2 text-xs font-semibold text-[#c08137]">
+                    {program.duration}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -274,7 +384,7 @@ export default function VigyaanLandingPage() {
             service aspirants with discipline and direction.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            {founderPhotos.map((photo, index) => (
+            {FOUNDER_PHOTOS.map((photo, index) => (
               <div
                 key={index}
                 className="bg-white/80 backdrop-blur-md rounded-[2rem] overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.12)] border border-white/60"
@@ -327,7 +437,7 @@ export default function VigyaanLandingPage() {
               </p>
             </a>
             <div></div>
-            <a href="tel:+917799077701" className="text-gray-300">
+            <a href="tel:+917396747359" className="text-gray-300">
               <p>
                 Alternative Number:{" "}
                 <span className="hover:underline">+91-7396747359</span>
@@ -335,36 +445,60 @@ export default function VigyaanLandingPage() {
             </a>
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-lg">
+          <form
+            onSubmit={handleInquirySubmit}
+            className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-lg"
+          >
             <div className="grid gap-5">
               <input
                 type="text"
                 placeholder="Your Name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="bg-black/30 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-[#c08137]"
               />
 
               <input
                 type="email"
                 placeholder="Email Address"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className="bg-black/30 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-[#c08137]"
               />
 
               <textarea
                 rows={5}
                 placeholder="Your Message"
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
                 className="bg-black/30 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-[#c08137]"
               />
 
               <button
-                onClick={handleSubmit}
-                className="bg-[#c08137] hover:scale-[1.02] transition-transform text-black font-black py-4 px-6 rounded-2xl shadow-xl"
+                type="submit"
+                disabled={submitting}
+                className="bg-[#c08137] hover:scale-[1.02] transition-transform text-black font-black py-4 px-6 rounded-2xl shadow-xl disabled:opacity-50"
               >
-                Send Message
+                {submitting ? "Sending..." : "Send Message"}
               </button>
+
+              {statusMessage && (
+                <p className="text-sm text-[#f2c179]" aria-live="polite">
+                  {statusMessage}
+                </p>
+              )}
             </div>
-          </div>
+          </form>
         </div>
       </section>
+      
+      <VigyaanChatWidget />
 
       <footer className="bg-[#0a0a0a] text-white px-6 py-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">

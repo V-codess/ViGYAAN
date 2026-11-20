@@ -47,3 +47,12 @@ dump.rdbnode_modules/
 .next/
 .env
 .env.*
+dump.rdb
+
+# subdirectories & python
+node_modules/
+.next/
+.env
+.env.*
+.venv/
+__pycache__/

@@ -1,0 +1,50 @@
+ [
+  {
+    "title": "Indian History",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "Core Subjects",
+    "duration": "Self-Paced / Guided Module"
+  },
+  {
+    "title": "Indian Economy",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "Core Subjects",
+    "duration": "Self-Paced / Guided Module"
+  },
+  {
+    "title": "Current Affairs",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "General Studies",
+    "duration": "Weekly / Ongoing"
+  },
+  {
+    "title": "Science & Technology",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "General Studies",
+    "duration": "Self-Paced / Guided Module"
+  },
+  {
+    "title": "General Mental Ability",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "Aptitude & Reasoning",
+    "duration": "Practice & Mock Module"
+  },
+  {
+    "title": "Indian Constitution",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "Polity & Governance",
+    "duration": "Self-Paced / Guided Module"
+  },
+  {
+    "title": "Environment & Ecology",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "General Studies",
+    "duration": "Self-Paced / Guided Module"
+  },
+  {
+    "title": "Basic Computer Knowledge",
+    "program": "Graduate Plus Civil Services Programme",
+    "category": "Foundational Skills",
+    "duration": "Self-Paced / Guided Module"
+  }
+    ]
